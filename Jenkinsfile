@@ -11,7 +11,7 @@ pipeline {
             steps {
                 git branch: 'main',
                 git credentialsId: 'github-credentials',
-                    url: 'https://github.com/AkashEssencecore/physio.git'
+                    url: 'https://github.com/AHISH17052006/NAAN-MUDHALVAN.git'
             }
         }
 
