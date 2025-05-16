@@ -1,22 +1,21 @@
-# Stage 1: Build React app
-FROM node:18 AS builder
+# Stage 1 – Build the React app
+FROM node:18 as builder
+
 WORKDIR /app
 
-# Install dependencies and build React app
 COPY package*.json ./
 RUN npm install
 
 COPY . .
-CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
+RUN npm run build   # This creates the /app/dist folder
 
-
-# Stage 2: Serve the build using Node.js (or alternatively NGINX)
+# Stage 2 – Serve using NGINX
 FROM nginx:alpine
-COPY --from=builder /app/build /usr/share/nginx/html
+
+COPY --from=builder /app/dist /usr/share/nginx/html
+
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
-COPY --from=builder /app /app
-
 # Install only server dependencies
 RUN npm install --omit=dev
 
