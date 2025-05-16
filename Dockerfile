@@ -10,9 +10,10 @@ COPY . .
 RUN npm run build
 
 # Stage 2: Serve the build using Node.js (or alternatively NGINX)
-FROM node:18 AS server
-WORKDIR /app
-
+FROM nginx:alpine
+COPY --from=builder /app/build /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
 COPY --from=builder /app /app
 
 # Install only server dependencies
