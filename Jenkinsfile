@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = 'yourdockerhubusername/react-webapp:latest'
+        DOCKER_IMAGE = 'ahish2006/react-physio-app:latest'  // Replace with your actual DockerHub username
     }
 
     stages {
@@ -15,7 +15,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    bat "docker build -t $DOCKER_IMAGE ."
+                    bat "docker build -t %DOCKER_IMAGE% ."
                 }
             }
         }
@@ -25,7 +25,8 @@ pipeline {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                         bat "docker login -u %DOCKER_USER% -p %DOCKER_PASS%"
-                        bat "docker push $DOCKER_IMAGE"
+                        bat "docker push %DOCKER_IMAGE%"
+                        bat "docker logout"
                     }
                 }
             }
@@ -41,6 +42,9 @@ pipeline {
     post {
         failure {
             echo 'Pipeline failed. Check logs above.'
+        }
+        success {
+            echo 'Pipeline completed successfully!'
         }
     }
 }
