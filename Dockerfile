@@ -7,7 +7,7 @@ COPY package*.json ./
 RUN npm install
 
 COPY . .
-RUN npm run build
+RUN npm run dev
 
 # Stage 2: Serve the build using Node.js (or alternatively NGINX)
 FROM nginx:alpine
