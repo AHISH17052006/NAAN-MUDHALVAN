@@ -10,19 +10,22 @@ RUN npm install
 
 # Copy the rest of the app and build
 COPY . .
-RUN npm run build   # This creates the /app/dist folder
+RUN npm run build   # This creates the /app/build folder by default in React
 
 # Stage 2 – Serve using NGINX
 FROM nginx:alpine
 
-# Copy built files from previous stage
-COPY --from=builder /app/dist /usr/share/nginx/html
+# Remove default nginx static assets
+RUN rm -rf /usr/share/nginx/html/*
 
-# Copy custom nginx config if you have one (optional)
+# Copy built files from previous stage
+COPY --from=builder /app/build /usr/share/nginx/html
+
+# (Optional) Copy custom nginx config (if needed)
 # COPY nginx.conf /etc/nginx/nginx.conf
 
-# Expose port (optional, good for documentation)
-EXPOSE 3000
+# Expose port 80 (since NGINX listens on port 80)
+EXPOSE 80
 
 # Start NGINX
 CMD ["nginx", "-g", "daemon off;"]
