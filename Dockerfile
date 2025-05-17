@@ -22,7 +22,7 @@ COPY --from=builder /app/dist /usr/share/nginx/html
 # COPY nginx.conf /etc/nginx/nginx.conf
 
 # Expose port (optional, good for documentation)
-EXPOSE 80
+EXPOSE 3000
 
 # Start NGINX
 CMD ["nginx", "-g", "daemon off;"]
